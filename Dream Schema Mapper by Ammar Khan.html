@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dream Schema Mapper by Ammar Khan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #word-display {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 300px;
+            height: 100px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="word-display">The word will appear here</div>
+    <textarea id="user-input" placeholder="Write here..."></textarea>
+    <button id="start-btn">Start</button>
+
+    <div id="results" style="display:none;">
+        <h2>Results</h2>
+        <ul id="results-list"></ul>
+    </div>
+
+    <script>
+        const words = [
+            'Places', 'People', 'Emotions', 'Objects', 'Colors', 'Actions', 'Sounds', 'Textures', 'Times', 'Animals',
+            'Weather', 'Tastes', 'Scents', 'Abstract Concepts', 'Nature', 'Worries', 'Problems', 'Hopes', 'Old Memories', 'TV Shows',
+            'Films', 'Books', 'Games', 'Random Words'
+        ];
+
+        let currentWordIndex = 0;
+        let timer;
+        const wordDisplay = document.getElementById('word-display');
+        const userInput = document.getElementById('user-input');
+        const startButton = document.getElementById('start-btn');
+        const resultsDiv = document.getElementById('results');
+        const resultsList = document.getElementById('results-list');
+
+        startButton.addEventListener('click', startTimer);
+
+        function startTimer() {
+            currentWordIndex = 0;
+            resultsList.innerHTML = '';
+            resultsDiv.style.display = 'none';
+            startButton.disabled = true;
+
+            showNextWord();
+            timer = setInterval(showNextWord, 25000); // 25 seconds interval
+        }
+
+        function showNextWord() {
+            if (currentWordIndex > 0) {
+                // Save the user's input for the previous word
+                const userText = userInput.value;
+                const previousWord = words[currentWordIndex - 1];
+                const resultItem = document.createElement('li');
+                resultItem.textContent = `${previousWord}: ${userText || 'Nothing written'}`;
+                resultsList.appendChild(resultItem);
+                userInput.value = ''; // Clear the text area
+            }
+
+            if (currentWordIndex < words.length) {
+                // Display the next word
+                wordDisplay.textContent = words[currentWordIndex];
+                currentWordIndex++;
+            } else {
+                // Stop the timer and show results
+                clearInterval(timer);
+                wordDisplay.textContent = 'Here are your dream schemas!';
+                startButton.disabled = false;
+                resultsDiv.style.display = 'block';
+            }
+        }
+    </script>
+
+</body>
+</html>
